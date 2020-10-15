@@ -1,10 +1,14 @@
 let mongoose = require("mongoose");
 let db = require("../models");
 
+console.log("seed start");
+
 mongoose.connect("mongodb://localhost/workout", {
   useNewUrlParser: true,
   useFindAndModify: false
 });
+
+console.log("seed file db connected");
 
 let workoutSeed = [
   {
@@ -123,6 +127,8 @@ let workoutSeed = [
     ]
   }
 ];
+
+console.log("seed end");
 
 db.Workout.deleteMany({})
   .then(() => db.Workout.collection.insertMany(workoutSeed))
