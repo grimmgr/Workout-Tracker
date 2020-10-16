@@ -2,7 +2,7 @@ const express = require("express");
 const logger = require("morgan");
 const mongoose = require("mongoose");
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8080;
 
 const db = require("./models");
 
@@ -15,17 +15,12 @@ app.use(express.json());
 
 app.use(express.static("public"));
 
-mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/workout", { useNewUrlParser: true, useUnifiedTopology: true });
+require("./routes/apiRoutes")(app);
+require("./routes/htmlRoutes")(app);
 
-app.get("/api/workouts", (req, res) => {
-    db.Workout.find({})
-    .then(dbWorkouts => {
-        res.json(dbWorkouts);
-    })
-    .catch(err => {
-        res.json(err);
-    })
-})
+mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost:27017/workout", { useNewUrlParser: true, useUnifiedTopology: true });
+
+
 
 app.listen(PORT, () => {
   console.log(`App running on port ${PORT}!`);
