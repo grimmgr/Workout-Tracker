@@ -41,7 +41,7 @@ function formatDate(date) {
     day: "numeric"
   };
 
-  return new Date(date).toLocaleDateString(options);
+  return new Date(date).toLocaleDateString(undefined, options);
 }
 
 function renderWorkoutSummary(summary) {
