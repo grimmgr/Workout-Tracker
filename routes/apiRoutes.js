@@ -12,7 +12,6 @@ module.exports = function(app) {
             }
         }])
         .then(dbWorkouts => {
-            console.log(dbWorkouts);
             res.json(dbWorkouts);
         })
         .catch(err => {
@@ -50,7 +49,6 @@ module.exports = function(app) {
             }
         ])
         .then(workouts => {
-            console.log(workouts);
             res.json(workouts);
         }).catch(err => {
             console.log(err);
