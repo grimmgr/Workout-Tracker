@@ -1,20 +1,19 @@
-// get all workout data from back-end
-
-// fetch("/api/workouts")
-//   .then(response => {
-//     return response.json();
-//   })
-//   .then(data => {
-//     console.log(data);
-//     populateChart(data);
-//   });
+let days = [];
 
 async function renderChart() {
   const weekOfWorkouts = await API.getWorkoutsInRange();
-  console.log(weekOfWorkouts);
   populateChart(weekOfWorkouts);
 };
 
+function setDays() {
+  for (let i = 0; i < 7; i++) {
+    const date = new Date(new Date().setDate(new Date().getDate() - i));
+    const day = date.toLocaleDateString(undefined, { weekday: "long" });
+    days.push(day);
+  }
+}
+
+setDays();
 renderChart();
 
 function generatePalette() {
@@ -55,13 +54,13 @@ function populateChart(data) {
     type: "line",
     data: {
       labels: [
-        "Sunday",
-        "Monday",
-        "Tuesday",
-        "Wednesday",
-        "Thursday",
-        "Friday",
-        "Saturday"
+        days[6],
+        days[5],
+        days[4],
+        days[3],
+        days[2],
+        days[1],
+        days[0]
       ],
       datasets: [
         {
@@ -103,13 +102,13 @@ function populateChart(data) {
     type: "bar",
     data: {
       labels: [
-        "Sunday",
-        "Monday",
-        "Tuesday",
-        "Wednesday",
-        "Thursday",
-        "Friday",
-        "Saturday",
+        days[6],
+        days[5],
+        days[4],
+        days[3],
+        days[2],
+        days[1],
+        days[0]
       ],
       datasets: [
         {
@@ -197,9 +196,7 @@ function duration(data) {
   let durations = [];
 
   data.forEach(workout => {
-    workout.exercises.forEach(exercise => {
-      durations.push(exercise.duration);
-    });
+      durations.push(workout.totalDuration);
   });
 
   return durations;
@@ -209,9 +206,7 @@ function calculateTotalWeight(data) {
   let total = [];
 
   data.forEach(workout => {
-    workout.exercises.forEach(exercise => {
-      total.push(exercise.weight);
-    });
+      total.push(workout.totalWeight);
   });
 
   return total;

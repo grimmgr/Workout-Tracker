@@ -7,7 +7,8 @@ module.exports = function(app) {
             $project : {
                 day: true,
                 exercises: true,
-                totalDuration: {$sum: "$exercises.duration"}
+                totalDuration: { $sum: "$exercises.duration" }
+                
             }
         }])
         .then(dbWorkouts => {
@@ -17,15 +18,6 @@ module.exports = function(app) {
         .catch(err => {
             res.json(err);
         })
-
-        // db.Workout.find({})
-        // .then(dbWorkouts => {
-        //     console.log(dbWorkouts);
-        //     res.json(dbWorkouts);
-        // })
-        // .catch(err => {
-        //     res.json(err);
-        // })
     });
 
     app.post("/api/workouts", (req, res) => {
@@ -47,7 +39,16 @@ module.exports = function(app) {
     });
 
     app.get("/api/workouts/range", (req, res) => {
-        db.Workout.find({}).sort({ day: -1 }).limit(7)
+        db.Workout.aggregate([
+            { $match: { day: { $gt: new Date(new Date() - 7 * 60 * 60 * 24 * 1000) } } },
+            { $project: {
+                day: true,
+                exercises: true,
+                totalDuration: { $sum: "$exercises.duration" },
+                totalWeight: { $sum: "$exercises.weight" }
+                }
+            }
+        ])
         .then(workouts => {
             console.log(workouts);
             res.json(workouts);
